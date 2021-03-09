@@ -92,7 +92,7 @@ function equalFunction() {
 }
 
 function allClear() {
-    display('0',mainDisplay);
+    display('0', mainDisplay);
     display('0', opDisplay);
     waitingSecondNum = false;
     firstNum = '';
@@ -103,25 +103,15 @@ function allClear() {
 }
 
 function clearEntry() {
-    if (firstNum === '') {
-        input = '0';
-        waitingSecondNum = false;
-        display(input, mainDisplay);
-    } else if (waitingSecondNum === true) {
-        operator = '';
-        waitingSecondNum = false;
-        display(input, opDisplay);
-        console.log('clear operator')
-    } else if (!firstNum == '' && operator === '') {
-        input = '0';
+    if (parseFloat(mainDisplay.innerText) === result) {
         firstNum = '';
-        display(input, mainDisplay);
-        display(input, opDisplay);
-        console.log('chain clear');
-    } else if (parseFloat(mainDisplay.innerText) === result) {
-        allClear();
-        console.log('result clear')
+        secondNum = '';
+        display('0', opDisplay);
     }
+    input = '0';
+    display(input, mainDisplay);
+    
+    
 }
 
 //Event listeners
