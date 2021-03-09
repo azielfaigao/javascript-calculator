@@ -45,7 +45,7 @@ function numberInput(button) {
 
 function operatorInput(button) {
 
-    if (firstNum === '' && !isNaN(parseFloat(input))) {
+    if (firstNum === '') {
         firstNum = input;
     } else if (waitingSecondNum === false) {
         console.log('CHAIN EQUATION')
