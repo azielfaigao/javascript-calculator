@@ -9,7 +9,6 @@ let result = '';
 let operator = '';
 
 // functions
-
 function compute(op, firstNum, secondNum) {
     switch (op) {
         case 'x':
@@ -42,7 +41,7 @@ function numberInput(button) {
 
 function operatorInput(button) {
 
-    if (firstNum === '') {
+    if (firstNum === '' && !isNaN(parseFloat(input))) {
         firstNum = input;
     } else if (waitingSecondNum === false) {
         result = compute(operator, firstNum, input);
