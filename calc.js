@@ -31,14 +31,11 @@ function display(value, calcDisplay) {
 function numberInput(button) {
     if (input === '0') {
         input = button.innerHTML;
-        console.log('DISPLAY CHANGE')
     } else if (waitingSecondNum === true) {
         input = button.innerHTML;
         waitingSecondNum = false;
-        console.log('SECOND VAL INPUT');
     } else {
         input += button.innerHTML;
-        console.log('NEW VAL INSERT')
     }
     display(input, mainDisplay);
 }
@@ -48,12 +45,10 @@ function operatorInput(button) {
     if (firstNum === '') {
         firstNum = input;
     } else if (waitingSecondNum === false) {
-        console.log('CHAIN EQUATION')
         result = compute(operator, firstNum, input);
         display(`${result} ${operator}`, opDisplay)
         firstNum = result;
     } else if (parseFloat(mainDisplay.innerText) === result) {
-        console.log('CHAIN EQUALS')
         display(`${result} ${operator}`, opDisplay);
         firstNum = result;
         display(firstNum, mainDisplay);
@@ -67,7 +62,6 @@ function operatorInput(button) {
 function dotInput(button) {
     if (!input.includes(button.innerHTML)) {
         input += button.innerHTML;
-        console.log('DOT INSERTED')
     }
 
     if (waitingSecondNum === true) {
