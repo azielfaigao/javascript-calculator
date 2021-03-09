@@ -6,7 +6,7 @@ let waitingSecondNum = false;
 let firstNum = '';
 let secondNum = '';
 let result = '';
-let op = '';
+let operator = '';
 
 // functions
 
@@ -21,6 +21,7 @@ function compute(op, firstNum, secondNum) {
         case '−':
             return parseFloat(firstNum) - parseFloat(secondNum);
     }
+    return secondNum;
 }
 
 function display(value, calcDisplay) {
@@ -39,34 +40,28 @@ function numberInput(button) {
         input += button.innerHTML;
         console.log('NEW VAL INSERT')
     }
+    display(input, mainDisplay);
 }
 
 function operatorInput(button) {
-    if (!op === '' && waitingSecondNum === true) {
-        op = button.innerHTML;
-    }
-    console.log(op)
 
     if (firstNum === '' && !isNaN(parseFloat(input))) {
-        firstNum = parseFloat(input);
+        firstNum = input;
     } else if (waitingSecondNum === false) {
         console.log('CHAIN EQUATION')
-        result = compute(op, firstNum, input);
-        display(result, mainDisplay);
+        result = compute(operator, firstNum, input);
+        display(`${result} ${operator}`, opDisplay)
         firstNum = result;
+    } else if (parseFloat(mainDisplay.innerText) === result) {
+        console.log('CHAIN EQUALS')
+        display(`${result} ${operator}`, opDisplay);
+        firstNum = result;
+        display(firstNum, mainDisplay);
     }
     waitingSecondNum = true;
-    op = button.innerHTML;
-
-    if (!opDisplay.innerHTML === '0') {
-        opDisplay.innerHTML += mainDisplay.innerHTML;
-        console.log('opDis aug')
-    } else {
-        opDisplay.innerHTML = mainDisplay.innerHTML;
-        console.log('opDis equals')
-    }
-    display(`${input} ${op} `, opDisplay);
-
+    operator = button.innerHTML;
+    console.log(operator);
+    display(`${firstNum} ${operator} `, opDisplay);
 }
 
 function dotInput(button) {
@@ -79,9 +74,57 @@ function dotInput(button) {
         input = '0.';
         waitingSecondNum = false;
     }
+    display(input, mainDisplay);
 }
 
-//add onclick event to input buttons
+function equalFunction() {
+    secondNum = input;
+    result = compute(operator, firstNum, secondNum);
+    display(result, mainDisplay);
+    if (operator === '') {
+        display(input, opDisplay);
+    } else {
+        display(`${firstNum} ${operator} ${secondNum}`, opDisplay);
+    }
+
+    firstNum = result;
+    waitingSecondNum = true;
+}
+
+function allClear() {
+    display('0',mainDisplay);
+    display('0', opDisplay);
+    waitingSecondNum = false;
+    firstNum = '';
+    secondNum = '';
+    input = '0';
+    result = '';
+    operator = '';
+}
+
+function clearEntry() {
+    if (firstNum === '') {
+        input = '0';
+        waitingSecondNum = false;
+        display(input, mainDisplay);
+    } else if (waitingSecondNum === true) {
+        operator = '';
+        waitingSecondNum = false;
+        display(input, opDisplay);
+        console.log('clear operator')
+    } else if (!firstNum == '' && operator === '') {
+        input = '0';
+        firstNum = '';
+        display(input, mainDisplay);
+        display(input, opDisplay);
+        console.log('chain clear');
+    } else if (parseFloat(mainDisplay.innerText) === result) {
+        allClear();
+        console.log('result clear')
+    }
+}
+
+//Event listeners
 const calculatorInput = document.querySelectorAll('.num, .dot, .op');
 calculatorInput.forEach(button => {
     button.addEventListener('click', () => {
@@ -94,41 +137,20 @@ calculatorInput.forEach(button => {
         else if (buttonClass.contains('op')) {
             operatorInput(button);
         }
-        display(input, mainDisplay);
     })
 });
 
-//add onclick event to EQUALS button
 const equals = document.querySelector('.eq');
 equals.addEventListener('click', () => {
-    secondNum = input;
-    result = compute(op, firstNum, secondNum);
-    display(result, mainDisplay);
-    display(`${firstNum} ${op} ${secondNum}`, opDisplay);
-    firstNum = result;
-    result = '';
-    waitingSecondNum = false;
+    equalFunction();
 })
 
-// add onclick event to AC button
 const ac = document.querySelector('.ac');
 ac.addEventListener('click', () => {
-    mainDisplay.innerHTML = '0';
-    opDisplay.innerHTML = '0';
-    waitingSecondNum = false;
-    firstNum = '';
-    secondNum = '';
-    input = '0';
-    result = '';
-    op = '';
+    allClear();
 })
 
-// add onclick event to CE
 const ce = document.querySelector('.ce');
 ce.addEventListener('click', () => {
-    input = '0';
-    display(input, mainDisplay);
-    if (input === firstNum) {
-        display('0', opDisplay);
-    }
+    clearEntry();
 })
