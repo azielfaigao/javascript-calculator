@@ -14,7 +14,6 @@ let operator = '';
 function numberInput(button) {
     if (inputNew === true) {
         mainDisplay.innerText = button;
-        console.log('new input')
         inputNew = false;
     } else {
         mainDisplay.innerText += button;
@@ -26,10 +25,8 @@ function operatorInput(opInput) {
         result = eval(firstNum + operator + mainDisplay.innerText);
         opDisplay.innerText = `${result} ${operator}`;
         mainDisplay.innerText = result;
-        // firstNum = result;
-    } 
-        firstNum = mainDisplay.innerText;
-    
+    }
+    firstNum = mainDisplay.innerText;
     operator = opInput;
     inputNew = true;
     opDisplay.innerText = `${firstNum} ${operator}`;
@@ -59,7 +56,7 @@ function equalFunction() {
         opDisplay.innerText = mainDisplay.innerText;
     } else {
         result = eval(firstNum + operator + secondNum);
-        opDisplay.innerText += ` ${secondNum}`;
+        opDisplay.innerText = `${firstNum} ${operator} ${secondNum}`;
         mainDisplay.innerText = result;
         firstNum = result;
     }
