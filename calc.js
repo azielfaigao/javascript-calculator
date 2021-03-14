@@ -1,179 +1,135 @@
 const mainDisplay = document.querySelector('.display-main');
 const opDisplay = document.querySelector('.display-operations');
 
-let input = '0';
-let inputSecondNum = false;
+let inputNew = false;
 let firstNum = '';
 let secondNum = '';
 let result = '';
 let operator = '';
 
 // functions
-// function compute(op, firstNum, secondNum) {
-//     let operandOne = parseFloat(firstNum);
-//     let operandTwo = parseFloat(secondNum);
-//     switch (op) {
-//         case 'x':
-//             return operandOne * operandTwo;
-//         case '%':
-//             return operandOne / operandTwo;
-//         case '+':
-//             return operandOne + operandTwo;
-//         case '−':
-//             return operandOne - operandTwo;
-//     }
-//     return secondNum;
-// }
-
-function display(value, calcDisplay) {
-    calcDisplay.innerHTML = value;
-}
-
 function numberInput(button) {
     if (mainDisplay.innerText === '0') {
         mainDisplay.innerText = button;
-    } else if (inputSecondNum === true) {
+    } else if (inputNew === true) {
+        // if (mainDisplay.innerText === firstNum && firstNum === result) {
+        //     allClear();
+        //     console.log('NEW EQUATION')
+        // } //****** :((
         mainDisplay.innerText = button;
-        inputSecondNum = false;
+        console.log('INPUT WAS TRUE')
+        inputNew = false;
     } else {
         mainDisplay.innerText += button;
     }
-    // display(input, mainDisplay);
 }
 
-function operatorInput(button) {
-    if (firstNum === '' && !isNaN(parseFloat(input))) {
-        firstNum = input;
-    } else if (inputSecondNum === false) {
-        result = eval(equation);
-        // display(`${result} ${operator}`, opDisplay)
+function operatorInput(opInput) {
+    if (inputNew === false) {
+        console.log('CHAIN EQUATION')
+        result = eval(firstNum + operator + mainDisplay.innerText);
+        opDisplay.innerText = `${result} ${operator}`;
+        mainDisplay.innerText = result;
         firstNum = result;
-    } else if (parseFloat(mainDisplay.innerText) === result) {
-        display(`${result} ${operator}`, opDisplay);
-        firstNum = result;
-        display(firstNum, mainDisplay);
+    } else {
+        firstNum = mainDisplay.innerText;
     }
+    operator = opInput;
+    opDisplay.innerText = `${firstNum} ${operator}`;
+    inputNew = true;
 
-    inputSecondNum = true;
-    operator = button;
-    console.log(operator);
-    
-    display(`${firstNum} ${operator} `, opDisplay);
+    if (operator === '−') {
+        operator = '-';
+    } else if (operator === '%') {
+        operator = '/';
+    } else if (operator === 'x') {
+        operator = '*';
+    }
 }
 
 function dotInput() {
-    if (!input.includes('.')) {
-        input += '.';
+    if (!mainDisplay.innerText.includes('.')) {
+        mainDisplay.innerText += '.';
+    } else if (inputNew === true) {
+        mainDisplay.innerText = '0.';
+        console.log('INPUT WAS TRUE')
+        inputNew = false;
     }
-
-    if (inputSecondNum === true) {
-        input = '0.';
-        inputSecondNum = false;
-    }
-    display(input, mainDisplay);
 }
 
 function equalFunction() {
-    if (secondNum === '' && !isNaN(parseFloat(input))) {
-        secondNum = input;
+    if (inputNew === false) {
+        secondNum = mainDisplay.innerText;
     }
-
-    if(operator === '−'){
-        operator = '-';
-    } else if(operator === '%'){
-        operator = '/';
-    } else if (operator === 'x'){
-        operator = '*';
+    if (operator === '') {
+        opDisplay.innerText = mainDisplay.innerText;
+        console.log('INPUT NOW TRUE')
+    } else {
+        result = eval(firstNum + operator + secondNum);
+        opDisplay.innerText = `${firstNum} ${operator} ${secondNum}`;
+        mainDisplay.innerText = result;
+        firstNum = result;
     }
-    let equation = `${firstNum} ${operator} ${secondNum}`;
-    result = eval(equation);
-    opDisplay.innerText = equation;
-    mainDisplay.innerText = result;
+    inputNew = true;
 
-    firstNum = result;
-    inputSecondNum = true;
+    if (mainDisplay.innerText.length >= 12) {
+        mainDisplay.style.overflow = 'scroll';
+    } else {
+        mainDisplay.style.overflow = '';
+    }
 }
 
 function allClear() {
-    display('0', mainDisplay);
-    display('0', opDisplay);
-    inputSecondNum = false;
-    firstNum = '';
-    secondNum = '';
-    input = '0';
+    mainDisplay.innerText = '0';
+    opDisplay.innerText = '0';
+    inputNew = false;
     result = '';
     operator = '';
+    firstNum = '';
+    secondNum = '';
 }
 
 function clearEntry() {
     if (parseFloat(mainDisplay.innerText) === result) {
         firstNum = '';
         secondNum = '';
-        display('0', opDisplay);
+        opDisplay.innerText = '0'
     }
-    input = '0';
-    display(input, mainDisplay);
+    mainDisplay.innerText = '0';
 }
 
-//Event listeners
-const calculatorInput = document.querySelectorAll('.num, .dot, .op');
-calculatorInput.forEach(button => {
+/** Event listeners **/
+document.querySelectorAll('.button').forEach(button => {
     button.addEventListener('click', () => {
         let buttonClass = button.classList;
-        if (buttonClass.contains('dot')) {
-            dotInput(button.innerText);
-        } else if (buttonClass.contains('num')) {
+        if (button.innerText >= 0 && button.innerText <= 9) {
             numberInput(button.innerText);
-        }
-        else if (buttonClass.contains('op')) {
+        } else if (button.classList.contains('dot')) {
+            dotInput();
+        } else if (buttonClass.contains('ac')) {
+            allClear();
+        } else if (buttonClass.contains('ce')) {
+            clearEntry();
+        } else if (buttonClass.contains('eq')) {
+            equalFunction();
+        } else {
             operatorInput(button.innerText);
         }
     })
 });
-
-const equals = document.querySelector('.eq');
-equals.addEventListener('click', () => {
-    // equalFunction();
-    secondNum = input;
-    if(operator === '−'){
-        operator = '-';
-    } else if(operator === '%'){
-        operator = '/';
-    }
-    let equation = `${firstNum} ${operator} ${secondNum}`;
-    result = eval(equation);
-    opDisplay.innerText = equation;
-    mainDisplay.innerText = result;
-    firstNum = result;
-    inputSecondNum = true;
-    console.log(equation)
-})
-
-const ac = document.querySelector('.ac');
-ac.addEventListener('click', () => {
-    allClear();
-})
-
-const ce = document.querySelector('.ce');
-ce.addEventListener('click', () => {
-    clearEntry();
-})
 
 document.addEventListener('keydown', (event) => {
     if (event.key >= 0 && event.key <= 9) {
         numberInput(event.key);
     } else if (event.key === '.') {
         dotInput();
-    } else if (event.key === 'x' || event.key === '+' || event.key === '-' || event.key === '%') {
+    } else if (event.key === '*' || event.key === '+' || event.key === '-' || event.key === '/' || event.key === 'x') {
         operatorInput(event.key);
     } else if (event.key === '=' || event.key === 'Enter') {
         equalFunction();
-    }
-
-    if (event.key === 'Backspace') {
+    } else if (event.key === 'Backspace') {
         clearEntry();
     } else if (event.key === 'Delete') {
         allClear();
     }
-    console.log(event.key)
 })
