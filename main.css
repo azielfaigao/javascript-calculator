@@ -44,6 +44,23 @@ body {
     height: 38px;
 }
 
+.display-main::-webkit-scrollbar {
+    height: 4px;
+}
+
+.display-main::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.display-main::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.display-main::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
 .display-indicate {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.05);
