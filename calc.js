@@ -5,6 +5,7 @@ mainDisplay.style.overflowX = 'scroll';
 mainDisplay.style.overflowY = 'hidden';
 
 let inputNew = true;
+let equalsClicked = false;
 let firstNum = '';
 let secondNum = '';
 let result = '';
@@ -13,6 +14,10 @@ let operator = '';
 /** Functions **/
 function numberInput(button) {
     if (inputNew === true) {
+        if (result === parseFloat(mainDisplay.innerText) && equalsClicked === true) {
+            allClear();
+            equalsClicked = false;
+        }
         mainDisplay.innerText = button;
         inputNew = false;
     } else {
@@ -25,6 +30,7 @@ function operatorInput(opInput) {
         result = eval(firstNum + operator + mainDisplay.innerText);
         opDisplay.innerText = `${result} ${operator}`;
         mainDisplay.innerText = result;
+        firstNum = result;
     }
     firstNum = mainDisplay.innerText;
     operator = opInput;
@@ -61,6 +67,7 @@ function equalFunction() {
         firstNum = result;
     }
     inputNew = true;
+    equalsClicked = true;
 }
 
 function allClear() {
