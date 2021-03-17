@@ -16,7 +16,6 @@ function numberInput(button) {
     if (inputNew === true) {
         if (result === parseFloat(mainDisplay.innerText) && equalsClicked === true) {
             allClear();
-            equalsClicked = false;
         }
         mainDisplay.innerText = button;
         inputNew = false;
@@ -30,11 +29,11 @@ function operatorInput(opInput) {
         result = eval(firstNum + operator + mainDisplay.innerText);
         opDisplay.innerText = `${result} ${operator}`;
         mainDisplay.innerText = result;
-        firstNum = result;
     }
     firstNum = mainDisplay.innerText;
     operator = opInput;
     inputNew = true;
+    equalsClicked = false;
     opDisplay.innerText = `${firstNum} ${operator}`;
     if (operator === '−') {
         operator = '-';
@@ -74,6 +73,7 @@ function allClear() {
     mainDisplay.innerText = '0';
     opDisplay.innerText = '0';
     inputNew = true;
+    equalsClicked = false;
     result = '';
     operator = '';
     firstNum = '';
