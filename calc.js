@@ -14,7 +14,7 @@ let operator = '';
 /** Functions **/
 function numberInput(button) {
     if (inputNew === true || mainDisplay.innerText === '0') {
-        if (result === parseFloat(mainDisplay.innerText) && equalsClicked === true) {
+        if (equalsClicked === true) {
             allClear();
         }
         mainDisplay.innerText = button;
@@ -47,6 +47,7 @@ function operatorInput(opInput) {
 function dotInput() {
     if (!mainDisplay.innerText.includes('.')) {
         mainDisplay.innerText += '.';
+        inputNew = false;
     } else if (inputNew === true) {
         mainDisplay.innerText = '0.';
         inputNew = false;
