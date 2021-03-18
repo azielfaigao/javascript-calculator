@@ -12,16 +12,31 @@ let result = '';
 let operator = '';
 
 /** Functions **/
-function numberInput(button) {
-    if (inputNew === true || mainDisplay.innerText === '0') {
-        if (equalsClicked === true) {
-            allClear();
+function calculatorInput(button) {
+    if (button >= 0 && button <= 9) {
+        if (inputNew === true || mainDisplay.innerText === '0') {
+            if (equalsClicked === true) {
+                allClear();
+            }
+            mainDisplay.innerText = button;
+            inputNew = false;
+        } else {
+            mainDisplay.innerText += button;
         }
-        mainDisplay.innerText = button;
-        inputNew = false;
-    } else {
-        mainDisplay.innerText += button;
+    } else if (button === '.') {
+        if (!mainDisplay.innerText.includes('.') && equalsClicked === false) {
+            mainDisplay.innerText += '.';
+            inputNew = false;
+        } else if (inputNew === true || equalsClicked === true) {
+            if (mainDisplay.innerText === opDisplay.innerText) {
+                opDisplay.innerText = '0';
+            }
+            mainDisplay.innerText = '0.';
+            inputNew = false;
+            equalsClicked = false;
+        }
     }
+
 }
 
 function operatorInput(opInput) {
@@ -41,16 +56,6 @@ function operatorInput(opInput) {
         operator = '/';
     } else if (operator === 'x') {
         operator = '*';
-    }
-}
-
-function dotInput() {
-    if (!mainDisplay.innerText.includes('.')) {
-        mainDisplay.innerText += '.';
-        inputNew = false;
-    } else if (inputNew === true) {
-        mainDisplay.innerText = '0.';
-        inputNew = false;
     }
 }
 
@@ -82,7 +87,7 @@ function allClear() {
 }
 
 function clearEntry() {
-    if (parseFloat(mainDisplay.innerText) === result) {
+    if (equalsClicked === true) {
         allClear();
     } else {
         mainDisplay.innerText = '0';
@@ -94,10 +99,8 @@ function clearEntry() {
 document.querySelectorAll('.button').forEach(button => {
     button.addEventListener('click', () => {
         let buttonClass = button.classList;
-        if (button.innerText >= 0 && button.innerText <= 9) {
-            numberInput(button.innerText);
-        } else if (button.classList.contains('dot')) {
-            dotInput();
+        if (button.innerText >= 0 && button.innerText <= 9 || button.classList.contains('dot')) {
+            calculatorInput(button.innerText);
         } else if (buttonClass.contains('ac')) {
             allClear();
         } else if (buttonClass.contains('ce')) {
@@ -111,10 +114,8 @@ document.querySelectorAll('.button').forEach(button => {
 });
 
 document.addEventListener('keydown', (event) => {
-    if (event.key >= 0 && event.key <= 9) {
-        numberInput(event.key);
-    } else if (event.key === '.') {
-        dotInput();
+    if (event.key >= 0 && event.key <= 9 || event.key === '.') {
+        calculatorInput(event.key);
     } else if (event.key === '*' || event.key === '+' || event.key === '-' || event.key === '/' || event.key === 'x') {
         operatorInput(event.key);
     } else if (event.key === '=' || event.key === 'Enter') {
