@@ -13,7 +13,7 @@ let operator = '';
 
 /** Functions **/
 function numberInput(button) {
-    if (inputNew === true) {
+    if (inputNew === true || mainDisplay.innerText === '0') {
         if (result === parseFloat(mainDisplay.innerText) && equalsClicked === true) {
             allClear();
         }
